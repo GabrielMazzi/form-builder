@@ -26,7 +26,9 @@ Um construtor de formulários moderno e intuitivo construído com React, TypeScr
 7. **Radio Group** - Grupo de opções mutuamente exclusivas
 8. **Arquivo** - Upload de arquivos
 9. **Imagem** - Upload de imagens com preview
-10. **Data** - Seletor de data
+10. **Data** - Seletor de data com suporte a data mínima e máxima
+11. **Hora** - Seletor de hora
+12. **Data e Hora** - Seletor de data e hora com suporte a data/hora mínima e máxima
 
 ## 🛠️ Tecnologias Utilizadas
 

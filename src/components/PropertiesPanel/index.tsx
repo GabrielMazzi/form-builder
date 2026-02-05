@@ -194,6 +194,80 @@ const PropertiesPanel: React.FC = () => {
 
                 <Divider sx={{ my: 1 }} />
 
+                {/* Propriedades específicas para campo de Data */}
+                {localField.type === 'date' && (
+                    <>
+                        <Typography variant="subtitle2" fontWeight={600} sx={{ color: 'text.primary', mt: 1 }}>
+                            Configurações de Data
+                        </Typography>
+
+                        <TextField
+                            fullWidth
+                            label="Data Mínima"
+                            type="date"
+                            value={localField.minDate || ''}
+                            onChange={(e) => handleUpdate({ minDate: e.target.value })}
+                            size="small"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            helperText="Data mínima permitida"
+                        />
+
+                        <TextField
+                            fullWidth
+                            label="Data Máxima"
+                            type="date"
+                            value={localField.maxDate || ''}
+                            onChange={(e) => handleUpdate({ maxDate: e.target.value })}
+                            size="small"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            helperText="Data máxima permitida"
+                        />
+
+                        <Divider sx={{ my: 1 }} />
+                    </>
+                )}
+
+                {/* Propriedades específicas para campo de Data e Hora */}
+                {localField.type === 'datetime' && (
+                    <>
+                        <Typography variant="subtitle2" fontWeight={600} sx={{ color: 'text.primary', mt: 1 }}>
+                            Configurações de Data e Hora
+                        </Typography>
+
+                        <TextField
+                            fullWidth
+                            label="Data/Hora Mínima"
+                            type="datetime-local"
+                            value={localField.minDate || ''}
+                            onChange={(e) => handleUpdate({ minDate: e.target.value })}
+                            size="small"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            helperText="Data e hora mínimas permitidas"
+                        />
+
+                        <TextField
+                            fullWidth
+                            label="Data/Hora Máxima"
+                            type="datetime-local"
+                            value={localField.maxDate || ''}
+                            onChange={(e) => handleUpdate({ maxDate: e.target.value })}
+                            size="small"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            helperText="Data e hora máximas permitidas"
+                        />
+
+                        <Divider sx={{ my: 1 }} />
+                    </>
+                )}
+
                 {/* Opções para Select/Radio */}
                 {needsOptions && (
                     <>

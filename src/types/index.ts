@@ -8,7 +8,9 @@ export type FieldType =
     | 'radio'
     | 'file'
     | 'image'
-    | 'date';
+    | 'date'
+    | 'time'
+    | 'datetime';
 
 export interface SelectOption {
     label: string;
@@ -25,8 +27,10 @@ export interface FormField {
     disabled?: boolean;
     helperText?: string;
     options?: SelectOption[];
-    displayCondition?: string; // JavaScript code
-    defaultValue?: any;
+    displayCondition?: string; // JavaScript code e datetime
+    maxDate?: string; // Data máxima para campos de data e datetime
+    minDate?: string; // Data mínima para campos de data
+    maxDate?: string; // Data máxima para campos de data
     validation?: {
         min?: number;
         max?: number;
@@ -53,4 +57,6 @@ export const FIELD_TYPES: { type: FieldType; label: string; icon: string }[] = [
     { type: 'file', label: 'Arquivo', icon: 'AttachFile' },
     { type: 'image', label: 'Imagem', icon: 'Image' },
     { type: 'date', label: 'Data', icon: 'CalendarToday' },
+    { type: 'time', label: 'Hora', icon: 'AccessTime' },
+    { type: 'datetime', label: 'Data e Hora', icon: 'Event' },
 ];

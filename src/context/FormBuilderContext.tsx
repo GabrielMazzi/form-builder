@@ -120,6 +120,8 @@ function getFieldLabel(type: FieldType): string {
         file: 'Arquivo',
         image: 'Imagem',
         date: 'Data',
+        time: 'Hora',
+        datetime: 'Data e Hora',
     };
     return labels[type];
 }

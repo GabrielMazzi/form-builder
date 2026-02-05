@@ -93,6 +93,8 @@ const FieldPalette: React.FC = () => {
         { type: 'file', label: 'Arquivo', icon: 'AttachFile' },
         { type: 'image', label: 'Imagem', icon: 'Image' },
         { type: 'date', label: 'Data', icon: 'CalendarToday' },
+        { type: 'time', label: 'Hora', icon: 'AccessTime' },
+        { type: 'datetime', label: 'Data e Hora', icon: 'Event' },
     ];
 
     return (

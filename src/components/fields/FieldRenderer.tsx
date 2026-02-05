@@ -232,6 +232,8 @@ const FieldRenderer: React.FC<FieldRendererProps> = ({ field, value, onChange })
                             value={value || null}
                             onChange={(newValue) => handleChange(newValue)}
                             disabled={field.disabled}
+                            minDate={field.minDate ? new Date(field.minDate) : undefined}
+                            maxDate={field.maxDate ? new Date(field.maxDate) : undefined}
                             slotProps={{
                                 textField: {
                                     fullWidth: true,
@@ -241,6 +243,48 @@ const FieldRenderer: React.FC<FieldRendererProps> = ({ field, value, onChange })
                             }}
                         />
                     </LocalizationProvider>
+                );
+
+            case 'time':
+                return (
+                    <TextField
+                        fullWidth
+                        type="time"
+                        label={field.label}
+                        name={field.name}
+                        required={field.required}
+                        disabled={field.disabled}
+                        helperText={field.helperText}
+                        value={value || ''}
+                        onChange={(e) => handleChange(e.target.value)}
+                        variant="outlined"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                );
+
+            case 'datetime':
+                return (
+                    <TextField
+                        fullWidth
+                        type="datetime-local"
+                        label={field.label}
+                        name={field.name}
+                        required={field.required}
+                        disabled={field.disabled}
+                        helperText={field.helperText}
+                        value={value || ''}
+                        onChange={(e) => handleChange(e.target.value)}
+                        variant="outlined"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        inputProps={{
+                            min: field.minDate,
+                            max: field.maxDate,
+                        }}
+                    />
                 );
 
             default:
