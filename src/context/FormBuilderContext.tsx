@@ -13,6 +13,7 @@ interface FormBuilderContextType {
     selectField: (id: string | null) => void;
     getSelectedField: () => FormField | null;
     duplicateField: (id: string) => void;
+    getFields: () => FormField[];
 }
 
 const FormBuilderContext = createContext<FormBuilderContextType | undefined>(undefined);
@@ -80,6 +81,10 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ childr
         return fields.find((field) => field.id === selectedFieldId) || null;
     };
 
+    const getFields = () => {
+        return fields;
+    };
+
     const duplicateField = (id: string) => {
         const fieldToDuplicate = fields.find((field) => field.id === id);
         if (fieldToDuplicate) {
@@ -103,6 +108,7 @@ export const FormBuilderProvider: React.FC<FormBuilderProviderProps> = ({ childr
         selectField,
         getSelectedField,
         duplicateField,
+        getFields,
     };
 
     return <FormBuilderContext.Provider value={value}>{children}</FormBuilderContext.Provider>;

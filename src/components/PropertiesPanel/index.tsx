@@ -14,12 +14,16 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from '@mui/material';
 import { Add, Delete, ExpandMore, Code } from '@mui/icons-material';
 import Editor from '@monaco-editor/react';
 
 const PropertiesPanel: React.FC = () => {
-    const { getSelectedField, updateField } = useFormBuilder();
+    const { getSelectedField, updateField, getFields } = useFormBuilder();
     const selectedField = getSelectedField();
 
     const [localField, setLocalField] = useState(selectedField);
@@ -80,9 +84,29 @@ const PropertiesPanel: React.FC = () => {
         handleUpdate({ options: newOptions });
     };
 
+    const normalizeValue = (text: string): string => {
+        return text
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+            .replace(/[^a-z0-9]+/g, '_') // Substitui caracteres especiais e espaços por _
+            .replace(/^_+|_+$/g, ''); // Remove _ do início e fim
+    };
+
     const handleUpdateOption = (index: number, field: keyof SelectOption, value: string) => {
         const newOptions = [...(localField.options || [])];
-        newOptions[index] = { ...newOptions[index], [field]: value };
+
+        if (field === 'label') {
+            // Quando a label é atualizada, atualiza automaticamente o value
+            newOptions[index] = {
+                ...newOptions[index],
+                label: value,
+                value: normalizeValue(value)
+            };
+        } else {
+            newOptions[index] = { ...newOptions[index], [field]: value };
+        }
+
         handleUpdate({ options: newOptions });
     };
 
@@ -188,6 +212,26 @@ const PropertiesPanel: React.FC = () => {
                     label={
                         <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 500 }}>
                             Desabilitado
+                        </Typography>
+                    }
+                />
+
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={localField.hidden || false}
+                            onChange={(e) => handleUpdate({ hidden: e.target.checked })}
+                            sx={{
+                                color: 'primary.main',
+                                '&.Mui-checked': {
+                                    color: 'primary.main',
+                                },
+                            }}
+                        />
+                    }
+                    label={
+                        <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 500 }}>
+                            Esconder
                         </Typography>
                     }
                 />
@@ -342,7 +386,126 @@ const PropertiesPanel: React.FC = () => {
                     </>
                 )}
 
-                {/* Condição de exibição */}
+                {/* Condição de Exibição Simplificada */}
+                {(() => {
+                    const allFields = getFields();
+                    const conditionalFields = allFields.filter(
+                        (f) =>
+                            f.id !== localField.id &&
+                            (f.type === 'select' || f.type === 'multiselect' || f.type === 'radio' || f.type === 'switch')
+                    );
+
+                    // Só mostrar se existirem campos que podem ser usados como condição
+                    if (conditionalFields.length > 0) {
+                        const sourceField = conditionalFields.find(
+                            (f) => f.id === localField.displayConditionConfig?.sourceFieldId
+                        );
+                        const availableValues = sourceField?.options || [];
+
+                        return (
+                            <>
+                                <Typography variant="subtitle2" fontWeight={600} sx={{ color: 'text.primary', mt: 2 }}>
+                                    Condição de Exibição
+                                </Typography>
+                                <Typography
+                                    variant="caption"
+                                    sx={{
+                                        color: 'text.secondary',
+                                        mb: 2,
+                                        display: 'block',
+                                        fontSize: '0.8rem',
+                                    }}
+                                >
+                                    Configure quando este campo deve ser exibido ou escondido
+                                </Typography>
+
+                                <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                                    <InputLabel>Campo de Controle</InputLabel>
+                                    <Select
+                                        value={localField.displayConditionConfig?.sourceFieldId || ''}
+                                        onChange={(e) =>
+                                            handleUpdate({
+                                                displayConditionConfig: {
+                                                    ...localField.displayConditionConfig,
+                                                    sourceFieldId: e.target.value,
+                                                    targetValue: undefined, // Reset valor quando mudar o campo
+                                                },
+                                            })
+                                        }
+                                        label="Campo de Controle"
+                                    >
+                                        <MenuItem value="">
+                                            <em>Nenhum</em>
+                                        </MenuItem>
+                                        {conditionalFields.map((field) => (
+                                            <MenuItem key={field.id} value={field.id}>
+                                                {field.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                {localField.displayConditionConfig?.sourceFieldId && sourceField && (
+                                    <>
+                                        <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                                            <InputLabel>Valor</InputLabel>
+                                            <Select
+                                                value={localField.displayConditionConfig?.targetValue || ''}
+                                                onChange={(e) =>
+                                                    handleUpdate({
+                                                        displayConditionConfig: {
+                                                            ...localField.displayConditionConfig,
+                                                            targetValue: e.target.value,
+                                                            action: localField.displayConditionConfig?.action || 'show',
+                                                        },
+                                                    })
+                                                }
+                                                label="Valor"
+                                            >
+                                                {sourceField.type === 'switch' ? (
+                                                    <>
+                                                        <MenuItem value="true">Ativado</MenuItem>
+                                                        <MenuItem value="false">Desativado</MenuItem>
+                                                    </>
+                                                ) : (
+                                                    availableValues.map((option) => (
+                                                        <MenuItem key={option.value} value={option.value}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))
+                                                )}
+                                            </Select>
+                                        </FormControl>
+
+                                        <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+                                            <InputLabel>Ação</InputLabel>
+                                            <Select
+                                                value={localField.displayConditionConfig?.action || 'show'}
+                                                onChange={(e) =>
+                                                    handleUpdate({
+                                                        displayConditionConfig: {
+                                                            ...localField.displayConditionConfig,
+                                                            action: e.target.value as 'show' | 'hide',
+                                                        },
+                                                    })
+                                                }
+                                                label="Ação"
+                                            >
+                                                <MenuItem value="show">Exibir</MenuItem>
+                                                <MenuItem value="hide">Esconder</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </>
+                                )}
+
+                                <Divider sx={{ my: 1 }} />
+                            </>
+                        );
+                    }
+                    return null;
+                })()}
+
+                {/* Código Customizado */}
                 <Accordion
                     elevation={0}
                     sx={{
@@ -363,7 +526,7 @@ const PropertiesPanel: React.FC = () => {
                         <Box display="flex" alignItems="center" gap={1}>
                             <Code fontSize="small" sx={{ color: 'primary.main' }} />
                             <Typography variant="subtitle2" fontWeight={500}>
-                                Condição de Exibição
+                                Código Customizado
                             </Typography>
                         </Box>
                     </AccordionSummary>
@@ -377,8 +540,7 @@ const PropertiesPanel: React.FC = () => {
                                 fontSize: '0.8rem',
                             }}
                         >
-                            Escreva código JavaScript que retorna true/false para controlar quando este campo
-                            deve ser exibido.
+                            Escreva código JavaScript.
                         </Typography>
 
                         {!showCodeEditor ? (
@@ -396,7 +558,7 @@ const PropertiesPanel: React.FC = () => {
                                     },
                                 }}
                             >
-                                {localField.displayCondition ? 'Editar Código' : 'Adicionar Condição'}
+                                {localField.customCode ? 'Editar Código' : 'Adicionar Condição'}
                             </Button>
                         ) : (
                             <Box>
@@ -404,8 +566,8 @@ const PropertiesPanel: React.FC = () => {
                                     <Editor
                                         height="150px"
                                         defaultLanguage="javascript"
-                                        value={localField.displayCondition || '// return true;'}
-                                        onChange={(value) => handleUpdate({ displayCondition: value })}
+                                        value={localField.customCode || '// return true;'}
+                                        onChange={(value) => handleUpdate({ customCode: value })}
                                         theme="vs-light"
                                         options={{
                                             minimap: { enabled: false },

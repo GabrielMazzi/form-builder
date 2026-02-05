@@ -28,17 +28,46 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
     };
 
     const shouldDisplayField = (field: any): boolean => {
-        if (!field.displayCondition) return true;
-
-        try {
-            // Create a function from the display condition code
-            // eslint-disable-next-line no-new-func
-            const conditionFn = new Function('formValues', field.displayCondition);
-            return conditionFn(formValues);
-        } catch (error) {
-            console.error('Error evaluating display condition:', error);
-            return true;
+        // Verificar se o campo está marcado como escondido
+        if (field.hidden) {
+            return false;
         }
+
+        // Nova lógica de condição simplificada
+        if (field.displayConditionConfig) {
+            const { sourceFieldId, targetValue, action } = field.displayConditionConfig;
+
+            if (sourceFieldId && targetValue) {
+                const sourceField = fields.find(f => f.id === sourceFieldId);
+                const currentValue = formValues[sourceFieldId];
+
+                // Para campos switch, converter para string para comparação
+                const normalizedCurrentValue = sourceField?.type === 'switch'
+                    ? String(currentValue)
+                    : currentValue;
+
+                const conditionMet = normalizedCurrentValue === targetValue;
+
+                // Se a ação é 'show', exibir quando a condição for verdadeira
+                // Se a ação é 'hide', esconder quando a condição for verdadeira
+                return action === 'show' ? conditionMet : !conditionMet;
+            }
+        }
+
+        // Lógica de código JavaScript customizado
+        if (field.customCode) {
+            try {
+                // Create a function from the custom code
+                // eslint-disable-next-line no-new-func
+                const conditionFn = new Function('formValues', field.customCode);
+                return conditionFn(formValues);
+            } catch (error) {
+                console.error('Error evaluating display condition:', error);
+                return true;
+            }
+        }
+
+        return true;
     };
 
     const handleSubmit = (e: React.FormEvent) => {

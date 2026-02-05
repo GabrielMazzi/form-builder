@@ -17,6 +17,12 @@ export interface SelectOption {
     value: string;
 }
 
+export interface DisplayConditionConfig {
+    sourceFieldId?: string; // ID do campo que controla a exibição
+    targetValue?: string; // Valor que o campo deve ter
+    action?: 'show' | 'hide'; // Ação: exibir ou esconder
+}
+
 export interface FormField {
     id: string;
     type: FieldType;
@@ -25,12 +31,13 @@ export interface FormField {
     placeholder?: string;
     required?: boolean;
     disabled?: boolean;
+    hidden?: boolean;
     helperText?: string;
     options?: SelectOption[];
-    displayCondition?: string; // JavaScript code e datetime
+    customCode?: string; // JavaScript code customizado
+    displayConditionConfig?: DisplayConditionConfig; // Nova configuração de condição
+    minDate?: string; // Data mínima para campos de data e datetime
     maxDate?: string; // Data máxima para campos de data e datetime
-    minDate?: string; // Data mínima para campos de data
-    maxDate?: string; // Data máxima para campos de data
     validation?: {
         min?: number;
         max?: number;
