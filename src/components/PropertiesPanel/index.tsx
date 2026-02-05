@@ -117,7 +117,7 @@ const PropertiesPanel: React.FC = () => {
             </Typography>
 
             <Box mt={3} display="flex" flexDirection="column" gap={2.5}>
-                {/* Basic Properties */}
+                {/* Propriedades Básicas */}
                 <TextField
                     fullWidth
                     label="Label"
@@ -194,7 +194,7 @@ const PropertiesPanel: React.FC = () => {
 
                 <Divider sx={{ my: 1 }} />
 
-                {/* Options for Select/Radio */}
+                {/* Opções para Select/Radio */}
                 {needsOptions && (
                     <>
                         <Box>
@@ -268,15 +268,14 @@ const PropertiesPanel: React.FC = () => {
                     </>
                 )}
 
-
-
-                {/* Display Condition */}
+                {/* Condição de exibição */}
                 <Accordion
                     elevation={0}
                     sx={{
                         border: '1px solid',
                         borderColor: 'divider',
                         '&:before': { display: 'none' },
+                        borderRadius: 1,
                     }}
                 >
                     <AccordionSummary
@@ -346,7 +345,6 @@ const PropertiesPanel: React.FC = () => {
                                     size="small"
                                     onClick={() => setShowCodeEditor(false)}
                                     sx={{ mt: 1 }}
-                                // variant='outlined'
                                 >
                                     Fechar Editor
                                 </Button>

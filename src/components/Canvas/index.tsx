@@ -58,7 +58,7 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                 userSelect: 'none',
                 '&:hover': {
                     borderColor: 'primary.main',
-                    bgcolor: 'rgba(0, 122, 255, 0.02)',
+                    bgcolor: 'rgba(255, 255, 255, 0.8)',
                     transform: 'translateY(-1px)',
                     boxShadow: isSelected ? '0px 6px 16px rgba(0, 122, 255, 0.25)' : '0px 4px 12px rgba(0, 0, 0, 0.08)',
                 },

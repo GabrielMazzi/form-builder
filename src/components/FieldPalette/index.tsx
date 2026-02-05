@@ -1,8 +1,9 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import type { FieldType } from '../../types';
-import { Paper, Typography, Box } from '@mui/material';
+import { Paper, Typography, Box, IconButton, Tooltip } from '@mui/material';
 import * as Icons from '@mui/icons-material';
+import { useFormBuilder } from '../../context/FormBuilderContext';
 
 interface DraggableFieldProps {
     type: FieldType;
@@ -11,6 +12,8 @@ interface DraggableFieldProps {
 }
 
 const DraggableField: React.FC<DraggableFieldProps> = ({ type, label, iconName }) => {
+    const { addField } = useFormBuilder();
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'FIELD',
         item: { fieldType: type },
@@ -20,6 +23,11 @@ const DraggableField: React.FC<DraggableFieldProps> = ({ type, label, iconName }
     }));
 
     const IconComponent = (Icons as any)[iconName] || Icons.Extension;
+
+    const handleAddField = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        addField(type);
+    };
 
     return (
         <div ref={drag as any}>
@@ -43,11 +51,30 @@ const DraggableField: React.FC<DraggableFieldProps> = ({ type, label, iconName }
                     },
                 }}
             >
-                <Box display="flex" alignItems="center" gap={1.5}>
-                    <IconComponent sx={{ color: 'primary.main', fontSize: 20 }} />
-                    <Typography variant="body2" fontWeight={500} sx={{ color: 'text.primary' }}>
-                        {label}
-                    </Typography>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Box display="flex" alignItems="center" gap={1.5}>
+                        <IconComponent sx={{ color: 'primary.main', fontSize: 20 }} />
+                        <Typography variant="body2" fontWeight={500} sx={{ color: 'text.primary' }}>
+                            {label}
+                        </Typography>
+                    </Box>
+
+                    <Tooltip title="Adicionar campo" placement="left">
+                        <IconButton
+                            size="small"
+                            onClick={handleAddField}
+                            sx={{
+                                color: 'primary.main',
+                                transition: 'all 0.2s ease',
+                                '&:hover': {
+                                    bgcolor: 'rgba(0, 122, 255, 0.15)',
+                                    transform: 'scale(1.1)',
+                                },
+                            }}
+                        >
+                            <Icons.Add fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
             </Paper>
         </div>
