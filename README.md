@@ -1,16 +1,19 @@
 # Form Builder - Construtor de Formulários
 
-Um construtor de formulários moderno e intuitivo construído com React, TypeScript, Material UI e Tailwind CSS.
+Um construtor de formulários moderno e intuitivo construído com React, TypeScript, Material UI e Tailwind CSS, com suporte completo para dispositivos móveis e tablets.
 
 ## 🚀 Funcionalidades
 
-- **Interface Drag & Drop**: Arraste campos da paleta para construir formulários facilmente
+- **Interface Drag & Drop Multi-Dispositivo**: Arraste campos tanto no desktop quanto em dispositivos touch
+- **Responsivo**: Interface adaptada para desktop, tablets e celulares
+- **Painéis Colapsáveis**: Em dispositivos móveis, acesse painéis laterais através de drawers deslizantes
 - **Campos Personalizáveis**: Suporte para 10 tipos de campos diferentes
 - **Editor de Propriedades**: Painel completo para editar propriedades de cada campo
 - **Condições de Exibição**: Adicione lógica JavaScript para controlar quando campos são exibidos
 - **Preview em Tempo Real**: Visualize seu formulário em uma modal antes de exportar
 - **Exportação JSON**: Exporte a estrutura do formulário em formato JSON
-- **Interface Moderna**: Design limpo e responsivo com Material UI e Tailwind CSS
+- **Design Apple**: Interface com linguagem visual inspirada na Apple
+- **Touch Optimizado**: Gestos e interações otimizadas para dispositivos touch
 
 ## 📋 Tipos de Campos Disponíveis
 
@@ -33,8 +36,30 @@ Um construtor de formulários moderno e intuitivo construído com React, TypeScr
 - **Material UI (MUI)** - Componentes React prontos
 - **Tailwind CSS** - Framework CSS utilitário
 - **React DnD** - Biblioteca de drag and drop
+- **React DnD Multi Backend** - Suporte a mouse e touch simultaneamente
 - **Monaco Editor** - Editor de código (mesmo do VS Code)
 - **date-fns** - Manipulação de datas
+
+## 📱 Uso em Dispositivos Móveis
+
+### Desktop
+- Painéis laterais fixos sempre visíveis
+- Drag and drop com mouse
+- Layout em 3 colunas (Paleta | Canvas | Propriedades)
+
+### Tablets
+- Layout adaptado com colunas mais largas
+- Drag and drop funciona com mouse e touch
+- Painéis fixos em telas médias
+
+### Smartphones
+- Canvas em tela cheia
+- Painéis laterais acessados via botões no header:
+  - **Ícone de módulos** (esquerda): Abre painel de componentes
+  - **Ícone de engrenagem** (direita): Abre painel de propriedades
+- Drag and drop otimizado para touch
+- Botões de ação compactos (somente ícones)
+- Tipografia e espaçamentos adaptados
 
 ## 🎯 Como Usar
 

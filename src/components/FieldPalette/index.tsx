@@ -76,6 +76,7 @@ const FieldPalette: React.FC = () => {
                 borderRight: '1px solid',
                 borderColor: 'divider',
                 p: 3,
+                height: '100%',
             }}
         >
             <Typography

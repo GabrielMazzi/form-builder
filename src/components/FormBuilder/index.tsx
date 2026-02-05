@@ -1,17 +1,54 @@
 import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Box, AppBar, Toolbar, Typography, Button } from '@mui/material';
-import { Visibility, GetApp } from '@mui/icons-material';
+import { TouchBackend } from 'react-dnd-touch-backend';
+import { MultiBackend, TouchTransition, MouseTransition } from 'react-dnd-multi-backend';
+import { Box, AppBar, Toolbar, Typography, Button, IconButton, Drawer, useMediaQuery, useTheme } from '@mui/material';
+import { Visibility, GetApp, ViewModule } from '@mui/icons-material';
 import FieldPalette from '../FieldPalette';
 import Canvas from '../Canvas';
 import PropertiesPanel from '../PropertiesPanel';
 import PreviewModal from '../PreviewModal';
 import { useFormBuilder } from '../../context/FormBuilderContext';
 
+// Custom backend configuration for multi-device support
+const HTML5toTouch = {
+    backends: [
+        {
+            id: 'html5',
+            backend: HTML5Backend,
+            transition: MouseTransition,
+        },
+        {
+            id: 'touch',
+            backend: TouchBackend,
+            options: { enableMouseEvents: true },
+            preview: true,
+            transition: TouchTransition,
+        },
+    ],
+};
+
 const FormBuilder: React.FC = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
+    const [leftDrawerOpen, setLeftDrawerOpen] = useState(false);
+    const [rightDrawerOpen, setRightDrawerOpen] = useState(false);
     const { fields } = useFormBuilder();
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const isTablet = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+
+    // Listen for custom event to open properties drawer
+    React.useEffect(() => {
+        const handleOpenDrawer = () => {
+            setRightDrawerOpen(true);
+        };
+        window.addEventListener('openPropertiesDrawer', handleOpenDrawer);
+        return () => {
+            window.removeEventListener('openPropertiesDrawer', handleOpenDrawer);
+        };
+    }, []);
 
     const handleExport = () => {
         const dataStr = JSON.stringify(fields, null, 2);
@@ -25,9 +62,9 @@ const FormBuilder: React.FC = () => {
     };
 
     return (
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
             <Box className="h-screen flex flex-col" sx={{ bgcolor: 'background.default' }}>
-                {/* Header */}
+                {/* Header - Apple Style */}
                 <AppBar
                     position="static"
                     elevation={0}
@@ -40,7 +77,21 @@ const FormBuilder: React.FC = () => {
                         borderRadius: 0,
                     }}
                 >
-                    <Toolbar sx={{ py: 1.5 }}>
+                    <Toolbar sx={{ py: 1.5, minHeight: { xs: 56, sm: 64 } }}>
+                        {/* Mobile: Menu buttons */}
+                        {isMobile && (
+                            <>
+                                <IconButton
+                                    edge="start"
+                                    color="inherit"
+                                    onClick={() => setLeftDrawerOpen(true)}
+                                    sx={{ mr: 1 }}
+                                >
+                                    <ViewModule />
+                                </IconButton>
+                            </>
+                        )}
+
                         <Typography
                             variant="h6"
                             component="div"
@@ -48,47 +99,51 @@ const FormBuilder: React.FC = () => {
                                 flexGrow: 1,
                                 fontWeight: 600,
                                 letterSpacing: '-0.02em',
-                                fontSize: '1.25rem',
+                                fontSize: { xs: '1rem', sm: '1.25rem' },
                             }}
                         >
                             Form Builder
                         </Typography>
 
-                        <Box display="flex" gap={1.5}>
+                        <Box display="flex" gap={1.5} alignItems="center">
                             <Button
                                 variant="contained"
-                                startIcon={<Visibility />}
+                                startIcon={!isMobile && <Visibility />}
                                 onClick={() => setPreviewOpen(true)}
                                 disabled={fields.length === 0}
+                                size={isMobile ? 'small' : 'medium'}
                                 sx={{
                                     bgcolor: 'primary.main',
                                     color: 'white',
                                     fontWeight: 500,
-                                    px: 3,
+                                    px: { xs: 2, sm: 3 },
+                                    minWidth: { xs: 'auto', sm: 'auto' },
                                     '&:hover': {
                                         bgcolor: 'primary.dark',
                                     },
                                 }}
                             >
-                                Visualizar
+                                {isMobile ? <Visibility /> : 'Visualizar'}
                             </Button>
                             <Button
                                 variant="outlined"
-                                startIcon={<GetApp />}
+                                startIcon={!isMobile && <GetApp />}
                                 onClick={handleExport}
                                 disabled={fields.length === 0}
+                                size={isMobile ? 'small' : 'medium'}
                                 sx={{
                                     borderColor: 'divider',
                                     color: 'text.primary',
                                     fontWeight: 500,
-                                    px: 3,
+                                    px: { xs: 2, sm: 3 },
+                                    minWidth: { xs: 'auto', sm: 'auto' },
                                     '&:hover': {
                                         borderColor: 'primary.main',
                                         bgcolor: 'rgba(0, 122, 255, 0.04)',
                                     },
                                 }}
                             >
-                                Exportar
+                                {isMobile ? <GetApp /> : 'Exportar'}
                             </Button>
                         </Box>
                     </Toolbar>
@@ -96,20 +151,95 @@ const FormBuilder: React.FC = () => {
 
                 {/* Main Content */}
                 <Box className="flex-1 flex overflow-hidden">
-                    {/* Left Panel - Field Palette (1/4) */}
-                    <Box sx={{ width: '25%', minWidth: '250px' }}>
-                        <FieldPalette />
-                    </Box>
+                    {/* Desktop: Left Panel - Field Palette */}
+                    {!isMobile && (
+                        <Box
+                            sx={{
+                                width: isTablet ? '30%' : '25%',
+                                minWidth: '250px',
+                                display: { xs: 'none', md: 'block' },
+                            }}
+                        >
+                            <FieldPalette />
+                        </Box>
+                    )}
 
-                    {/* Center Panel - Canvas (1/2) */}
-                    <Box sx={{ width: '50%', minWidth: '400px' }}>
+                    {/* Mobile: Left Drawer - Field Palette */}
+                    {isMobile && (
+                        <Drawer
+                            anchor="left"
+                            open={leftDrawerOpen}
+                            onClose={() => setLeftDrawerOpen(false)}
+                            PaperProps={{
+                                sx: {
+                                    width: { xs: '85%', sm: '350px' },
+                                    maxWidth: '400px',
+                                    borderRadius: '0 16px 16px 0',
+                                },
+                            }}
+                        >
+                            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+                                    <Typography variant="h6" fontWeight={600}>
+                                        Componentes
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ flex: 1, overflow: 'auto' }}>
+                                    <FieldPalette />
+                                </Box>
+                            </Box>
+                        </Drawer>
+                    )}
+
+                    {/* Center Panel - Canvas */}
+                    <Box
+                        sx={{
+                            flex: 1,
+                            minWidth: { xs: '100%', md: isTablet ? '40%' : '400px' },
+                        }}
+                    >
                         <Canvas />
                     </Box>
 
-                    {/* Right Panel - Properties (1/4) */}
-                    <Box sx={{ width: '25%', minWidth: '250px' }}>
-                        <PropertiesPanel />
-                    </Box>
+                    {/* Desktop: Right Panel - Properties */}
+                    {!isMobile && (
+                        <Box
+                            sx={{
+                                width: isTablet ? '30%' : '25%',
+                                minWidth: '250px',
+                                display: { xs: 'none', md: 'block' },
+                            }}
+                        >
+                            <PropertiesPanel />
+                        </Box>
+                    )}
+
+                    {/* Mobile: Right Drawer - Properties */}
+                    {isMobile && (
+                        <Drawer
+                            anchor="right"
+                            open={rightDrawerOpen}
+                            onClose={() => setRightDrawerOpen(false)}
+                            PaperProps={{
+                                sx: {
+                                    width: { xs: '85%', sm: '350px' },
+                                    maxWidth: '400px',
+                                    borderRadius: '16px 0 0 16px',
+                                },
+                            }}
+                        >
+                            <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+                                    <Typography variant="h6" fontWeight={600}>
+                                        Propriedades
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ flex: 1, overflow: 'auto', height: '100%' }}>
+                                    <PropertiesPanel />
+                                </Box>
+                            </Box>
+                        </Drawer>
+                    )}
                 </Box>
 
                 {/* Preview Modal */}

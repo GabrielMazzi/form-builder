@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { useFormBuilder } from '../../context/FormBuilderContext';
 import type { FormField } from '../../types';
-import { Paper, IconButton, Box, Typography, Chip } from '@mui/material';
-import { Delete, ContentCopy, DragIndicator } from '@mui/icons-material';
+import { Paper, IconButton, Box, Typography, Chip, useMediaQuery, useTheme } from '@mui/material';
+import { Delete, ContentCopy, DragIndicator, Settings } from '@mui/icons-material';
 
 interface DraggableFormFieldProps {
     field: FormField;
@@ -14,6 +14,9 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
     const { selectField, selectedFieldId, deleteField, duplicateField, moveField } =
         useFormBuilder();
     const ref = useRef<HTMLDivElement>(null);
+    const theme = useTheme();
+    // const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const [{ isDragging }, drag] = useDrag({
         type: 'FORM_FIELD',
@@ -51,6 +54,8 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                 borderColor: isSelected ? 'primary.main' : 'divider',
                 bgcolor: 'background.paper',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                touchAction: 'none',
+                userSelect: 'none',
                 '&:hover': {
                     borderColor: 'primary.main',
                     bgcolor: 'rgba(0, 122, 255, 0.02)',
@@ -62,14 +67,31 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                 }),
             }}
         >
-            <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box display="flex" alignItems="center" gap={1.5} flex={1}>
-                    <DragIndicator sx={{ cursor: 'move', color: 'text.secondary', fontSize: 20 }} />
-                    <Box flex={1}>
-                        <Typography variant="body1" fontWeight={500} sx={{ color: 'text.primary' }}>
+            <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap={isMobile ? 'wrap' : 'nowrap'}>
+                <Box display="flex" alignItems="center" gap={1.5} flex={1} minWidth={0}>
+                    <DragIndicator
+                        sx={{
+                            cursor: 'move',
+                            color: 'text.secondary',
+                            fontSize: 20,
+                            touchAction: 'none',
+                        }}
+                    />
+                    <Box flex={1} minWidth={0}>
+                        <Typography
+                            variant="body1"
+                            fontWeight={500}
+                            sx={{
+                                color: 'text.primary',
+                                fontSize: { xs: '0.875rem', sm: '1rem' },
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
                             {field.label}
                         </Typography>
-                        <Box display="flex" gap={1} mt={0.5}>
+                        <Box display="flex" gap={1} mt={0.5} flexWrap="wrap">
                             <Chip
                                 label={field.type}
                                 size="small"
@@ -77,8 +99,8 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                                     bgcolor: 'rgba(0, 122, 255, 0.08)',
                                     color: 'primary.main',
                                     fontWeight: 500,
-                                    fontSize: '0.75rem',
-                                    height: 24,
+                                    fontSize: { xs: '0.7rem', sm: '0.75rem' },
+                                    height: { xs: 20, sm: 24 },
                                 }}
                             />
                             {field.required && (
@@ -89,8 +111,8 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                                         bgcolor: 'rgba(255, 59, 48, 0.08)',
                                         color: 'error.main',
                                         fontWeight: 500,
-                                        fontSize: '0.75rem',
-                                        height: 24,
+                                        fontSize: { xs: '0.7rem', sm: '0.75rem' },
+                                        height: { xs: 20, sm: 24 },
                                     }}
                                 />
                             )}
@@ -98,7 +120,31 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                     </Box>
                 </Box>
 
-                <Box display="flex" gap={0.5}>
+                <Box display="flex" gap={0.5} sx={{ ml: 1 }}>
+                    {isMobile && (
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                selectField(field.id);
+                                // Trigger drawer opening via event
+                                window.dispatchEvent(new CustomEvent('openPropertiesDrawer'));
+                            }}
+                            title="Propriedades"
+                            sx={{
+                                color: 'text.secondary',
+                                transition: 'all 0.2s ease',
+                                width: { xs: 32, sm: 36 },
+                                height: { xs: 32, sm: 36 },
+                                '&:hover': {
+                                    color: 'primary.main',
+                                    bgcolor: 'rgba(0, 122, 255, 0.08)',
+                                },
+                            }}
+                        >
+                            <Settings fontSize="small" />
+                        </IconButton>
+                    )}
                     <IconButton
                         size="small"
                         onClick={(e) => {
@@ -109,6 +155,8 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                         sx={{
                             color: 'text.secondary',
                             transition: 'all 0.2s ease',
+                            width: { xs: 32, sm: 36 },
+                            height: { xs: 32, sm: 36 },
                             '&:hover': {
                                 color: 'primary.main',
                                 bgcolor: 'rgba(0, 122, 255, 0.08)',
@@ -127,6 +175,8 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                         sx={{
                             color: 'text.secondary',
                             transition: 'all 0.2s ease',
+                            width: { xs: 32, sm: 36 },
+                            height: { xs: 32, sm: 36 },
                             '&:hover': {
                                 color: 'error.main',
                                 bgcolor: 'rgba(255, 59, 48, 0.08)',
@@ -162,7 +212,7 @@ const Canvas: React.FC = () => {
                     bgcolor: isOver ? 'rgba(0, 122, 255, 0.02)' : 'background.paper',
                     transition: 'background-color 0.2s',
                     minHeight: '500px',
-                    p: 4,
+                    p: { xs: 2, sm: 4 },
                 }}
             >
                 <Typography
@@ -173,6 +223,7 @@ const Canvas: React.FC = () => {
                         color: 'text.primary',
                         letterSpacing: '-0.02em',
                         mb: 3,
+                        fontSize: { xs: '1.25rem', sm: '1.5rem' },
                     }}
                 >
                     Construtor de Formulário
@@ -187,7 +238,7 @@ const Canvas: React.FC = () => {
                             border: '2px dashed',
                             borderColor: isOver ? 'primary.main' : 'divider',
                             borderRadius: 3,
-                            p: 6,
+                            p: { xs: 4, sm: 6 },
                             mt: 4,
                             bgcolor: isOver ? 'rgba(0, 122, 255, 0.02)' : 'transparent',
                             transition: 'all 0.2s ease',
@@ -198,7 +249,8 @@ const Canvas: React.FC = () => {
                             sx={{
                                 color: 'text.secondary',
                                 textAlign: 'center',
-                                fontSize: '0.95rem',
+                                fontSize: { xs: '0.875rem', sm: '0.95rem' },
+                                px: 2,
                             }}
                         >
                             Arraste campos da paleta para começar a construir seu formulário

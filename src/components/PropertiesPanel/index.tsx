@@ -196,75 +196,79 @@ const PropertiesPanel: React.FC = () => {
 
                 {/* Options for Select/Radio */}
                 {needsOptions && (
-                    <Box>
-                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                            <Typography variant="subtitle2" fontWeight={600} sx={{ color: 'text.primary' }}>
-                                Opções
-                            </Typography>
-                            <IconButton
-                                size="small"
-                                onClick={handleAddOption}
-                                sx={{
-                                    color: 'primary.main',
-                                    '&:hover': {
-                                        bgcolor: 'rgba(0, 122, 255, 0.08)',
-                                    },
-                                }}
-                            >
-                                <Add />
-                            </IconButton>
-                        </Box>
+                    <>
+                        <Box>
+                            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                                <Typography variant="subtitle2" fontWeight={600} sx={{ color: 'text.primary' }}>
+                                    Opções
+                                </Typography>
+                                <IconButton
+                                    size="small"
+                                    onClick={handleAddOption}
+                                    sx={{
+                                        color: 'primary.main',
+                                        '&:hover': {
+                                            bgcolor: 'rgba(0, 122, 255, 0.08)',
+                                        },
+                                    }}
+                                    aria-label="adicionar opção"
+                                >
+                                    <Add />
+                                </IconButton>
+                            </Box>
 
-                        {localField.options?.map((option, index) => (
-                            <Paper
-                                key={index}
-                                elevation={0}
-                                sx={{
-                                    p: 2,
-                                    mb: 1.5,
-                                    bgcolor: 'background.paper',
-                                    border: '1px solid',
-                                    borderColor: 'divider',
-                                }}
-                            >
-                                <Box display="flex" gap={1} alignItems="start">
-                                    <Box flex={1}>
-                                        <TextField
-                                            fullWidth
-                                            label="Label"
-                                            value={option.label}
-                                            onChange={(e) => handleUpdateOption(index, 'label', e.target.value)}
+                            {localField.options?.map((option, index) => (
+                                <Paper
+                                    key={index}
+                                    elevation={0}
+                                    sx={{
+                                        p: 2,
+                                        mb: 1.5,
+                                        bgcolor: 'background.paper',
+                                        border: '1px solid',
+                                        borderColor: 'divider',
+                                    }}
+                                >
+                                    <Box display="flex" gap={1} alignItems="start">
+                                        <Box flex={1}>
+                                            <TextField
+                                                fullWidth
+                                                label="Label"
+                                                value={option.label}
+                                                onChange={(e) => handleUpdateOption(index, 'label', e.target.value)}
+                                                size="small"
+                                                sx={{ mb: 1 }}
+                                            />
+                                            <TextField
+                                                fullWidth
+                                                label="Valor"
+                                                value={option.value}
+                                                onChange={(e) => handleUpdateOption(index, 'value', e.target.value)}
+                                                size="small"
+                                            />
+                                        </Box>
+                                        <IconButton
                                             size="small"
-                                            sx={{ mb: 1 }}
-                                        />
-                                        <TextField
-                                            fullWidth
-                                            label="Valor"
-                                            value={option.value}
-                                            onChange={(e) => handleUpdateOption(index, 'value', e.target.value)}
-                                            size="small"
-                                        />
+                                            onClick={() => handleDeleteOption(index)}
+                                            sx={{
+                                                color: 'text.secondary',
+                                                '&:hover': {
+                                                    color: 'error.main',
+                                                    bgcolor: 'rgba(255, 59, 48, 0.08)',
+                                                },
+                                            }}
+                                        >
+                                            <Delete fontSize="small" />
+                                        </IconButton>
                                     </Box>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => handleDeleteOption(index)}
-                                        sx={{
-                                            color: 'text.secondary',
-                                            '&:hover': {
-                                                color: 'error.main',
-                                                bgcolor: 'rgba(255, 59, 48, 0.08)',
-                                            },
-                                        }}
-                                    >
-                                        <Delete fontSize="small" />
-                                    </IconButton>
-                                </Box>
-                            </Paper>
-                        ))}
-                    </Box>
+                                </Paper>
+                            ))}
+                        </Box>
+                        <Divider sx={{ my: 1 }} />
+                    </>
                 )}
 
-                <Divider sx={{ my: 1 }} />
+
 
                 {/* Display Condition */}
                 <Accordion

@@ -41,3 +41,28 @@ body {
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
+
+/* Touch support */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: rgba(0, 122, 255, 0.1);
+  }
+
+  button,
+  a,
+  [role="button"] {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Prevent text selection during drag */
+.react-dnd-dragging * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+/* Improve touch scrolling */
+.h-full {
+  -webkit-overflow-scrolling: touch;
+}
