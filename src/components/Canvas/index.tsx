@@ -40,31 +40,59 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
     return (
         <Paper
             ref={ref}
-            elevation={isSelected ? 3 : 1}
+            elevation={0}
             onClick={() => selectField(field.id)}
             sx={{
-                p: 2,
+                p: 2.5,
                 mb: 2,
                 cursor: 'pointer',
                 opacity: isDragging ? 0.5 : 1,
-                border: isSelected ? 2 : 1,
+                border: '1px solid',
                 borderColor: isSelected ? 'primary.main' : 'divider',
+                bgcolor: 'background.paper',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
-                    backgroundColor: 'action.hover',
+                    borderColor: 'primary.main',
+                    bgcolor: 'rgba(0, 122, 255, 0.02)',
+                    transform: 'translateY(-1px)',
+                    boxShadow: isSelected ? '0px 6px 16px rgba(0, 122, 255, 0.25)' : '0px 4px 12px rgba(0, 0, 0, 0.08)',
                 },
+                ...(isSelected && {
+                    boxShadow: '0px 4px 12px rgba(0, 122, 255, 0.25)',
+                }),
             }}
         >
             <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box display="flex" alignItems="center" gap={1} flex={1}>
-                    <DragIndicator sx={{ cursor: 'move', color: 'text.secondary' }} />
+                <Box display="flex" alignItems="center" gap={1.5} flex={1}>
+                    <DragIndicator sx={{ cursor: 'move', color: 'text.secondary', fontSize: 20 }} />
                     <Box flex={1}>
-                        <Typography variant="body1" fontWeight={500}>
+                        <Typography variant="body1" fontWeight={500} sx={{ color: 'text.primary' }}>
                             {field.label}
                         </Typography>
                         <Box display="flex" gap={1} mt={0.5}>
-                            <Chip label={field.type} size="small" color="primary" variant="outlined" />
+                            <Chip
+                                label={field.type}
+                                size="small"
+                                sx={{
+                                    bgcolor: 'rgba(0, 122, 255, 0.08)',
+                                    color: 'primary.main',
+                                    fontWeight: 500,
+                                    fontSize: '0.75rem',
+                                    height: 24,
+                                }}
+                            />
                             {field.required && (
-                                <Chip label="Obrigatório" size="small" color="error" variant="outlined" />
+                                <Chip
+                                    label="Obrigatório"
+                                    size="small"
+                                    sx={{
+                                        bgcolor: 'rgba(255, 59, 48, 0.08)',
+                                        color: 'error.main',
+                                        fontWeight: 500,
+                                        fontSize: '0.75rem',
+                                        height: 24,
+                                    }}
+                                />
                             )}
                         </Box>
                     </Box>
@@ -78,6 +106,14 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                             duplicateField(field.id);
                         }}
                         title="Duplicar"
+                        sx={{
+                            color: 'text.secondary',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                                color: 'primary.main',
+                                bgcolor: 'rgba(0, 122, 255, 0.08)',
+                            },
+                        }}
                     >
                         <ContentCopy fontSize="small" />
                     </IconButton>
@@ -87,8 +123,15 @@ const DraggableFormField: React.FC<DraggableFormFieldProps> = ({ field, index })
                             e.stopPropagation();
                             deleteField(field.id);
                         }}
-                        color="error"
                         title="Excluir"
+                        sx={{
+                            color: 'text.secondary',
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                                color: 'error.main',
+                                bgcolor: 'rgba(255, 59, 48, 0.08)',
+                            },
+                        }}
                     >
                         <Delete fontSize="small" />
                     </IconButton>
@@ -114,14 +157,24 @@ const Canvas: React.FC = () => {
     return (
         <div ref={drop as any} className="h-full">
             <Box
-                className="h-full bg-white p-6 overflow-y-auto"
+                className="h-full overflow-y-auto"
                 sx={{
-                    backgroundColor: isOver ? 'action.hover' : 'background.paper',
+                    bgcolor: isOver ? 'rgba(0, 122, 255, 0.02)' : 'background.paper',
                     transition: 'background-color 0.2s',
                     minHeight: '500px',
+                    p: 4,
                 }}
             >
-                <Typography variant="h5" gutterBottom fontWeight={600} color="primary">
+                <Typography
+                    variant="h5"
+                    gutterBottom
+                    sx={{
+                        fontWeight: 600,
+                        color: 'text.primary',
+                        letterSpacing: '-0.02em',
+                        mb: 3,
+                    }}
+                >
                     Construtor de Formulário
                 </Typography>
 
@@ -133,13 +186,21 @@ const Canvas: React.FC = () => {
                         sx={{
                             border: '2px dashed',
                             borderColor: isOver ? 'primary.main' : 'divider',
-                            borderRadius: 2,
+                            borderRadius: 3,
                             p: 6,
                             mt: 4,
-                            backgroundColor: isOver ? 'action.hover' : 'transparent',
+                            bgcolor: isOver ? 'rgba(0, 122, 255, 0.02)' : 'transparent',
+                            transition: 'all 0.2s ease',
                         }}
                     >
-                        <Typography variant="body1" color="text.secondary" textAlign="center">
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: 'text.secondary',
+                                textAlign: 'center',
+                                fontSize: '0.95rem',
+                            }}
+                        >
                             Arraste campos da paleta para começar a construir seu formulário
                         </Typography>
                     </Box>

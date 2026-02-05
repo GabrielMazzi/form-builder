@@ -31,11 +31,35 @@ const PropertiesPanel: React.FC = () => {
 
     if (!selectedField || !localField) {
         return (
-            <Box className="h-full bg-gray-50 p-4 border-l border-gray-200">
-                <Typography variant="h6" gutterBottom fontWeight={600} color="text.secondary">
+            <Box
+                className="h-full overflow-y-auto"
+                sx={{
+                    bgcolor: 'background.default',
+                    borderLeft: '1px solid',
+                    borderColor: 'divider',
+                    p: 3,
+                }}
+            >
+                <Typography
+                    variant="h6"
+                    gutterBottom
+                    sx={{
+                        fontWeight: 600,
+                        color: 'text.primary',
+                        letterSpacing: '-0.02em',
+                        mb: 2,
+                    }}
+                >
                     Propriedades
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        color: 'text.secondary',
+                        mt: 2,
+                        fontSize: '0.875rem',
+                    }}
+                >
                     Selecione um campo no formulário para editar suas propriedades
                 </Typography>
             </Box>
@@ -70,12 +94,29 @@ const PropertiesPanel: React.FC = () => {
     const needsOptions = ['select', 'multiselect', 'radio'].includes(localField.type);
 
     return (
-        <Box className="h-full bg-gray-50 p-4 overflow-y-auto border-l border-gray-200">
-            <Typography variant="h6" gutterBottom fontWeight={600} color="primary">
+        <Box
+            className="h-full overflow-y-auto"
+            sx={{
+                bgcolor: 'background.default',
+                borderLeft: '1px solid',
+                borderColor: 'divider',
+                p: 3,
+            }}
+        >
+            <Typography
+                variant="h6"
+                gutterBottom
+                sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    letterSpacing: '-0.02em',
+                    mb: 3,
+                }}
+            >
                 Propriedades
             </Typography>
 
-            <Box mt={3} display="flex" flexDirection="column" gap={2}>
+            <Box mt={3} display="flex" flexDirection="column" gap={2.5}>
                 {/* Basic Properties */}
                 <TextField
                     fullWidth
@@ -116,9 +157,19 @@ const PropertiesPanel: React.FC = () => {
                         <Checkbox
                             checked={localField.required || false}
                             onChange={(e) => handleUpdate({ required: e.target.checked })}
+                            sx={{
+                                color: 'primary.main',
+                                '&.Mui-checked': {
+                                    color: 'primary.main',
+                                },
+                            }}
                         />
                     }
-                    label="Obrigatório"
+                    label={
+                        <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 500 }}>
+                            Obrigatório
+                        </Typography>
+                    }
                 />
 
                 <FormControlLabel
@@ -126,9 +177,19 @@ const PropertiesPanel: React.FC = () => {
                         <Checkbox
                             checked={localField.disabled || false}
                             onChange={(e) => handleUpdate({ disabled: e.target.checked })}
+                            sx={{
+                                color: 'primary.main',
+                                '&.Mui-checked': {
+                                    color: 'primary.main',
+                                },
+                            }}
                         />
                     }
-                    label="Desabilitado"
+                    label={
+                        <Typography variant="body2" sx={{ color: 'text.primary', fontWeight: 500 }}>
+                            Desabilitado
+                        </Typography>
+                    }
                 />
 
                 <Divider sx={{ my: 1 }} />
@@ -136,17 +197,36 @@ const PropertiesPanel: React.FC = () => {
                 {/* Options for Select/Radio */}
                 {needsOptions && (
                     <Box>
-                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
-                            <Typography variant="subtitle2" fontWeight={600}>
+                        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                            <Typography variant="subtitle2" fontWeight={600} sx={{ color: 'text.primary' }}>
                                 Opções
                             </Typography>
-                            <IconButton size="small" color="primary" onClick={handleAddOption}>
+                            <IconButton
+                                size="small"
+                                onClick={handleAddOption}
+                                sx={{
+                                    color: 'primary.main',
+                                    '&:hover': {
+                                        bgcolor: 'rgba(0, 122, 255, 0.08)',
+                                    },
+                                }}
+                            >
                                 <Add />
                             </IconButton>
                         </Box>
 
                         {localField.options?.map((option, index) => (
-                            <Paper key={index} elevation={0} sx={{ p: 1.5, mb: 1, backgroundColor: 'white' }}>
+                            <Paper
+                                key={index}
+                                elevation={0}
+                                sx={{
+                                    p: 2,
+                                    mb: 1.5,
+                                    bgcolor: 'background.paper',
+                                    border: '1px solid',
+                                    borderColor: 'divider',
+                                }}
+                            >
                                 <Box display="flex" gap={1} alignItems="start">
                                     <Box flex={1}>
                                         <TextField
@@ -167,8 +247,14 @@ const PropertiesPanel: React.FC = () => {
                                     </Box>
                                     <IconButton
                                         size="small"
-                                        color="error"
                                         onClick={() => handleDeleteOption(index)}
+                                        sx={{
+                                            color: 'text.secondary',
+                                            '&:hover': {
+                                                color: 'error.main',
+                                                bgcolor: 'rgba(255, 59, 48, 0.08)',
+                                            },
+                                        }}
                                     >
                                         <Delete fontSize="small" />
                                     </IconButton>
@@ -181,15 +267,39 @@ const PropertiesPanel: React.FC = () => {
                 <Divider sx={{ my: 1 }} />
 
                 {/* Display Condition */}
-                <Accordion>
-                    <AccordionSummary expandIcon={<ExpandMore />}>
+                <Accordion
+                    elevation={0}
+                    sx={{
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        '&:before': { display: 'none' },
+                    }}
+                >
+                    <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        sx={{
+                            '&:hover': {
+                                bgcolor: 'rgba(0, 122, 255, 0.02)',
+                            },
+                        }}
+                    >
                         <Box display="flex" alignItems="center" gap={1}>
-                            <Code fontSize="small" />
-                            <Typography variant="subtitle2">Condição de Exibição</Typography>
+                            <Code fontSize="small" sx={{ color: 'primary.main' }} />
+                            <Typography variant="subtitle2" fontWeight={500}>
+                                Condição de Exibição
+                            </Typography>
                         </Box>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                color: 'text.secondary',
+                                mb: 2,
+                                display: 'block',
+                                fontSize: '0.8rem',
+                            }}
+                        >
                             Escreva código JavaScript que retorna true/false para controlar quando este campo
                             deve ser exibido.
                         </Typography>
@@ -200,12 +310,20 @@ const PropertiesPanel: React.FC = () => {
                                 variant="outlined"
                                 startIcon={<Code />}
                                 onClick={() => setShowCodeEditor(true)}
+                                sx={{
+                                    borderColor: 'divider',
+                                    color: 'text.primary',
+                                    '&:hover': {
+                                        borderColor: 'primary.main',
+                                        bgcolor: 'rgba(0, 122, 255, 0.04)',
+                                    },
+                                }}
                             >
                                 {localField.displayCondition ? 'Editar Código' : 'Adicionar Condição'}
                             </Button>
                         ) : (
                             <Box>
-                                <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 1, overflow: 'hidden' }}>
+                                <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
                                     <Editor
                                         height="150px"
                                         defaultLanguage="javascript"

@@ -26,30 +26,66 @@ const FormBuilder: React.FC = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <Box className="h-screen flex flex-col">
-                {/* Header */}
-                <AppBar position="static" elevation={1}>
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
+            <Box className="h-screen flex flex-col" sx={{ bgcolor: 'background.default' }}>
+                {/* Header - Apple Style */}
+                <AppBar 
+                    position="static" 
+                    elevation={0}
+                    sx={{
+                        bgcolor: 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: 'blur(20px)',
+                        borderBottom: '1px solid',
+                        borderColor: 'divider',
+                        color: 'text.primary',
+                    }}
+                >
+                    <Toolbar sx={{ py: 1.5 }}>
+                        <Typography 
+                            variant="h6" 
+                            component="div" 
+                            sx={{ 
+                                flexGrow: 1, 
+                                fontWeight: 600,
+                                letterSpacing: '-0.02em',
+                                fontSize: '1.25rem',
+                            }}
+                        >
                             Form Builder
                         </Typography>
 
-                        <Box display="flex" gap={1}>
+                        <Box display="flex" gap={1.5}>
                             <Button
                                 variant="contained"
-                                color="secondary"
                                 startIcon={<Visibility />}
                                 onClick={() => setPreviewOpen(true)}
                                 disabled={fields.length === 0}
+                                sx={{
+                                    bgcolor: 'primary.main',
+                                    color: 'white',
+                                    fontWeight: 500,
+                                    px: 3,
+                                    '&:hover': {
+                                        bgcolor: 'primary.dark',
+                                    },
+                                }}
                             >
                                 Visualizar
                             </Button>
                             <Button
                                 variant="outlined"
-                                color="inherit"
                                 startIcon={<GetApp />}
                                 onClick={handleExport}
                                 disabled={fields.length === 0}
+                                sx={{
+                                    borderColor: 'divider',
+                                    color: 'text.primary',
+                                    fontWeight: 500,
+                                    px: 3,
+                                    '&:hover': {
+                                        borderColor: 'primary.main',
+                                        bgcolor: 'rgba(0, 122, 255, 0.04)',
+                                    },
+                                }}
                             >
                                 Exportar
                             </Button>
@@ -60,7 +96,7 @@ const FormBuilder: React.FC = () => {
                 {/* Main Content */}
                 <Box className="flex-1 flex overflow-hidden">
                     {/* Left Panel - Field Palette (1/4) */}
-                    <Box sx={{ width: '25%', minWidth: '250px', maxWidth: '350px' }}>
+                    <Box sx={{ width: '25%', minWidth: '250px' }}>
                         <FieldPalette />
                     </Box>
 
@@ -70,7 +106,7 @@ const FormBuilder: React.FC = () => {
                     </Box>
 
                     {/* Right Panel - Properties (1/4) */}
-                    <Box sx={{ width: '25%', minWidth: '250px', maxWidth: '350px' }}>
+                    <Box sx={{ width: '25%', minWidth: '250px' }}>
                         <PropertiesPanel />
                     </Box>
                 </Box>

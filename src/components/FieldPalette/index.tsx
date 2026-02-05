@@ -24,21 +24,28 @@ const DraggableField: React.FC<DraggableFieldProps> = ({ type, label, iconName }
     return (
         <div ref={drag as any}>
             <Paper
-                elevation={isDragging ? 4 : 1}
-                className="cursor-move transition-all hover:shadow-lg"
+                elevation={isDragging ? 3 : 0}
+                className="cursor-move transition-all"
                 sx={{
                     p: 2,
                     mb: 1.5,
                     opacity: isDragging ? 0.5 : 1,
                     cursor: 'move',
+                    bgcolor: 'background.paper',
+                    border: '1px solid',
+                    borderColor: isDragging ? 'primary.main' : 'divider',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
-                        backgroundColor: 'action.hover',
+                        bgcolor: 'rgba(0, 122, 255, 0.04)',
+                        borderColor: 'primary.main',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0px 4px 12px rgba(0, 122, 255, 0.15)',
                     },
                 }}
             >
                 <Box display="flex" alignItems="center" gap={1.5}>
-                    <IconComponent color="primary" />
-                    <Typography variant="body2" fontWeight={500}>
+                    <IconComponent sx={{ color: 'primary.main', fontSize: 20 }} />
+                    <Typography variant="body2" fontWeight={500} sx={{ color: 'text.primary' }}>
                         {label}
                     </Typography>
                 </Box>
@@ -62,11 +69,35 @@ const FieldPalette: React.FC = () => {
     ];
 
     return (
-        <Box className="h-full bg-gray-50 p-4 overflow-y-auto border-r border-gray-200">
-            <Typography variant="h6" gutterBottom fontWeight={600} color="primary">
+        <Box
+            className="h-full overflow-y-auto"
+            sx={{
+                bgcolor: 'background.default',
+                borderRight: '1px solid',
+                borderColor: 'divider',
+                p: 3,
+            }}
+        >
+            <Typography
+                variant="h6"
+                gutterBottom
+                sx={{
+                    fontWeight: 600,
+                    color: 'text.primary',
+                    mb: 1,
+                    letterSpacing: '-0.02em',
+                }}
+            >
                 Componentes
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            <Typography
+                variant="body2"
+                sx={{
+                    color: 'text.secondary',
+                    mb: 3,
+                    fontSize: '0.875rem',
+                }}
+            >
                 Arraste os campos para o formulário
             </Typography>
 

@@ -48,14 +48,32 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-            <DialogTitle>
-                <Typography variant="h6" fontWeight={600}>
+        <Dialog
+            open={open}
+            onClose={onClose}
+            maxWidth="md"
+            fullWidth
+            PaperProps={{
+                sx: {
+                    borderRadius: 3,
+                    boxShadow: '0px 12px 32px rgba(0, 0, 0, 0.14)',
+                },
+            }}
+        >
+            <DialogTitle sx={{ pb: 2 }}>
+                <Typography
+                    variant="h6"
+                    sx={{
+                        fontWeight: 600,
+                        color: 'text.primary',
+                        letterSpacing: '-0.02em',
+                    }}
+                >
                     Pré-visualização do Formulário
                 </Typography>
             </DialogTitle>
 
-            <DialogContent dividers>
+            <DialogContent dividers sx={{ borderColor: 'divider' }}>
                 {fields.length === 0 ? (
                     <Box
                         display="flex"
@@ -63,7 +81,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
                         justifyContent="center"
                         sx={{ p: 6, textAlign: 'center' }}
                     >
-                        <Typography variant="body1" color="text.secondary">
+                        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
                             Nenhum campo adicionado ao formulário ainda.
                         </Typography>
                     </Box>
@@ -85,12 +103,32 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
                 )}
             </DialogContent>
 
-            <DialogActions>
-                <Button onClick={onClose} variant="outlined">
+            <DialogActions sx={{ p: 2.5, gap: 1.5 }}>
+                <Button
+                    onClick={onClose}
+                    variant="outlined"
+                    sx={{
+                        borderColor: 'divider',
+                        color: 'text.primary',
+                        fontWeight: 500,
+                        px: 3,
+                        '&:hover': {
+                            borderColor: 'primary.main',
+                            bgcolor: 'rgba(0, 122, 255, 0.04)',
+                        },
+                    }}
+                >
                     Fechar
                 </Button>
                 {fields.length > 0 && (
-                    <Button onClick={handleSubmit} variant="contained" color="primary">
+                    <Button
+                        onClick={handleSubmit}
+                        variant="contained"
+                        sx={{
+                            fontWeight: 500,
+                            px: 3,
+                        }}
+                    >
                         Testar Envio
                     </Button>
                 )}
