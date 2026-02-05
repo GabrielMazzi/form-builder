@@ -17,7 +17,7 @@ body {
   color: #1D1D1F;
 }
 
-/* Scrollbar styling - Apple style */
+/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

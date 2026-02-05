@@ -1,4 +1,4 @@
-/* Apple-style smooth animations */
+/* Smooth animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -15,7 +15,7 @@
   animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Custom scrollbar for better Apple aesthetics */
+/* Custom scrollbar for better aesthetics */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;

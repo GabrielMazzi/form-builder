@@ -6,29 +6,29 @@ const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#007AFF', // Apple blue
+      main: '#007AFF',
       light: '#5AC8FA',
       dark: '#0051D5',
     },
     secondary: {
-      main: '#FF9500', // Apple orange
+      main: '#FF9500',
       light: '#FFCC00',
       dark: '#FF6B00',
     },
     background: {
-      default: '#F5F5F7', // Apple background
+      default: '#F5F5F7',
       paper: '#FFFFFF',
     },
     text: {
-      primary: '#1D1D1F', // Apple dark text
-      secondary: '#6E6E73', // Apple gray text
+      primary: '#1D1D1F',
+      secondary: '#6E6E73',
     },
     divider: '#D2D2D7',
     error: {
-      main: '#FF3B30', // Apple red
+      main: '#FF3B30',
     },
     success: {
-      main: '#34C759', // Apple green
+      main: '#34C759',
     },
   },
   typography: {
@@ -44,11 +44,11 @@ const theme = createTheme({
     },
   },
   shape: {
-    borderRadius: 12, // Apple rounded corners
+    borderRadius: 12,
   },
   shadows: [
     'none',
-    '0px 2px 8px rgba(0, 0, 0, 0.08)', // Soft shadow
+    '0px 2px 8px rgba(0, 0, 0, 0.08)',
     '0px 4px 12px rgba(0, 0, 0, 0.1)',
     '0px 8px 24px rgba(0, 0, 0, 0.12)',
     '0px 12px 32px rgba(0, 0, 0, 0.14)',

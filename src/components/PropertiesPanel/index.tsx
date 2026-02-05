@@ -342,6 +342,7 @@ const PropertiesPanel: React.FC = () => {
                                     size="small"
                                     onClick={() => setShowCodeEditor(false)}
                                     sx={{ mt: 1 }}
+                                // variant='outlined'
                                 >
                                     Fechar Editor
                                 </Button>

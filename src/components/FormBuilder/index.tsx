@@ -27,9 +27,9 @@ const FormBuilder: React.FC = () => {
     return (
         <DndProvider backend={HTML5Backend}>
             <Box className="h-screen flex flex-col" sx={{ bgcolor: 'background.default' }}>
-                {/* Header - Apple Style */}
-                <AppBar 
-                    position="static" 
+                {/* Header */}
+                <AppBar
+                    position="static"
                     elevation={0}
                     sx={{
                         bgcolor: 'rgba(255, 255, 255, 0.8)',
@@ -37,14 +37,15 @@ const FormBuilder: React.FC = () => {
                         borderBottom: '1px solid',
                         borderColor: 'divider',
                         color: 'text.primary',
+                        borderRadius: 0,
                     }}
                 >
                     <Toolbar sx={{ py: 1.5 }}>
-                        <Typography 
-                            variant="h6" 
-                            component="div" 
-                            sx={{ 
-                                flexGrow: 1, 
+                        <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{
+                                flexGrow: 1,
                                 fontWeight: 600,
                                 letterSpacing: '-0.02em',
                                 fontSize: '1.25rem',
