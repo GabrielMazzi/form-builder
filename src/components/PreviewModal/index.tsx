@@ -60,17 +60,14 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ open, onClose }) => {
                 },
             }}
         >
-            <DialogTitle sx={{ pb: 2 }}>
-                <Typography
-                    variant="h6"
-                    sx={{
-                        fontWeight: 600,
-                        color: 'text.primary',
-                        letterSpacing: '-0.02em',
-                    }}
-                >
-                    Pré-visualização do Formulário
-                </Typography>
+            <DialogTitle sx={{
+                pb: 2,
+                fontWeight: 600,
+                color: 'text.primary',
+                letterSpacing: '-0.02em',
+            }}>
+
+                Pré-visualização do Formulário
             </DialogTitle>
 
             <DialogContent dividers sx={{ borderColor: 'divider' }}>
